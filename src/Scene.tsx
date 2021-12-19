@@ -1,47 +1,41 @@
-import {getVideoMetadata, VideoMetadata} from '@remotion/media-utils';
-import {ThreeCanvas, useVideoTexture} from '@remotion/three';
-import React, {useEffect, useRef, useState} from 'react';
-import {AbsoluteFill, useVideoConfig, Video} from 'remotion';
-import {Phone} from './Phone';
+import {ThreeCanvas} from '@remotion/three';
+import React from 'react';
+import {AbsoluteFill, Img, useVideoConfig} from 'remotion';
+import {Globe} from './Globe';
+import background from './assets/background_shadow.png';
+import {
+	EffectComposer,
+	ChromaticAberration,
+	Noise,
+	Scanline,
+} from '@react-three/postprocessing';
+import {Vector2} from 'three';
+// eslint-disable-next-line
+// @ts-ignore
+import {BlendFunction} from 'postprocessing';
 
 const container: React.CSSProperties = {
-	backgroundColor: 'white',
+	backgroundColor: '#0C0014',
 };
 
-const videoStyle: React.CSSProperties = {
-	position: 'absolute',
-	opacity: 0,
-};
-
-export const Scene: React.FC<{
-	videoSrc: string;
-	baseScale: number;
-}> = ({baseScale, videoSrc}) => {
-	const videoRef = useRef<HTMLVideoElement>(null);
+export const Scene: React.FC = () => {
 	const {width, height} = useVideoConfig();
-	const [videoData, setVideoData] = useState<VideoMetadata | null>(null);
 
-	useEffect(() => {
-		getVideoMetadata(videoSrc)
-			.then((data) => setVideoData(data))
-			.catch((err) => console.log(err));
-	}, [videoSrc]);
-
-	const texture = useVideoTexture(videoRef);
 	return (
 		<AbsoluteFill style={container}>
-			<Video ref={videoRef} src={videoSrc} style={videoStyle} />
-			{videoData ? (
-				<ThreeCanvas linear width={width} height={height}>
-					<ambientLight intensity={1.5} color={0xffffff} />
-					<pointLight position={[10, 10, 0]} />
-					<Phone
-						baseScale={baseScale}
-						videoTexture={texture}
-						aspectRatio={videoData.aspectRatio}
+			<ThreeCanvas linear width={width} height={height} className="z-10">
+				<ambientLight intensity={2} color={0xffffff} />
+				<Globe />
+				<EffectComposer>
+					<Noise premultiply blendFunction={BlendFunction.ADD} />
+					<Scanline blendFunction={BlendFunction.OVERLAY} density={1} />
+					<ChromaticAberration
+						blendFunction={BlendFunction.NORMAL}
+						offset={new Vector2(0.004, 0.002)}
 					/>
-				</ThreeCanvas>
-			) : null}
+				</EffectComposer>
+			</ThreeCanvas>
+			<Img src={background} className="z-0 absolute" />
 		</AbsoluteFill>
 	);
 };

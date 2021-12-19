@@ -1,7 +1,6 @@
 import {Composition} from 'remotion';
-import phone from './assets/phone.mp4';
-import tablet from './assets/tablet.mp4';
 import {Scene} from './Scene';
+import './styles.css';
 
 // Welcome to the Remotion Three Starter Kit!
 // Two compositions have been created, showing how to use
@@ -11,8 +10,6 @@ import {Scene} from './Scene';
 
 // The device frame automatically adjusts to the video aspect ratio.
 // Change the variable below to try out tablet mode:
-type Device = 'phone' | 'tablet';
-const deviceType: Device = 'phone';
 
 // Remotion Docs:
 // https://remotion.dev/docs
@@ -25,19 +22,13 @@ const deviceType: Device = 'phone';
 
 export const RemotionVideo: React.FC = () => {
 	return (
-		<>
-			<Composition
-				id="Scene"
-				component={Scene}
-				durationInFrames={300}
-				fps={30}
-				width={1280}
-				height={720}
-				defaultProps={{
-					videoSrc: deviceType === 'phone' ? phone : tablet,
-					baseScale: deviceType === 'phone' ? 1 : 1.8,
-				}}
-			/>
-		</>
+		<Composition
+			id="Scene"
+			component={Scene}
+			durationInFrames={60 * 30}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
 	);
 };
