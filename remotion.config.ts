@@ -2,6 +2,8 @@ import {Config} from 'remotion';
 
 Config.Rendering.setImageFormat('jpeg');
 
+Config.Puppeteer.setBrowserExecutable('/opt/homebrew/bin/chromium');
+
 Config.Bundling.overrideWebpackConfig((currentConfiguration) => {
 	return {
 		...currentConfiguration,

@@ -1,10 +1,11 @@
-import {Sphere, Stars, useAspect, useTexture} from '@react-three/drei';
-import {useThree} from '@react-three/fiber';
 import React, {useEffect} from 'react';
+import {useThree} from '@react-three/fiber';
+import {CubicBezierCurve3, Vector3} from 'three';
+import {Sphere, useAspect, useTexture} from '@react-three/drei';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import uvMap from './assets/earth-uv-map.jpg';
-import * as THREE from 'three';
 
+import {Stars} from './CustomStars';
+import uvMap from './assets/earth-uv-map.jpg';
 import coordinates from './data/coordinates';
 
 const CAMERA_DISTANCE = 3;
@@ -14,21 +15,22 @@ export const Globe: React.FC = () => {
 	const {durationInFrames, fps} = useVideoConfig();
 	const earthUVMap = useTexture(uvMap);
 
-	// Place a camera and set the distance to the object.
-	// Then make it look at the object.
 	const camera = useThree((state) => state.camera);
 	useEffect(() => {
 		camera.position.set(0, 0, CAMERA_DISTANCE);
 		camera.lookAt(0, 0, 0);
 	}, [camera]);
 
-	// During the whole scene, the phone is rotating.
-	// 2 * Math.PI is a full rotation.
-	const constantRotation = interpolate(
+	const constantXRotation = interpolate(
 		frame,
 		[0, durationInFrames],
-		[0, -Math.PI * 2]
+		[0, Math.PI * 2]
 	);
+	// const constantYRotation = interpolate(
+	// 	frame,
+	// 	[0, durationInFrames / 2, durationInFrames],
+	// 	[0.6, 0, 0.6]
+	// );
 
 	const latLonToCoord = ({
 		lat,
@@ -38,32 +40,40 @@ export const Globe: React.FC = () => {
 		lat: number;
 		lon: number;
 		radius?: number;
-	}): THREE.Vector3 => {
+	}): Vector3 => {
 		const phi = (90 - lat) * (Math.PI / 180);
 		const theta = (lon + 180) * (Math.PI / 180);
 		const x = -(radius * Math.sin(phi) * Math.cos(theta));
 		const z = radius * Math.sin(phi) * Math.sin(theta);
 		const y = radius * Math.cos(phi);
-		return new THREE.Vector3(x, y, z);
+		return new Vector3(x, y, z);
 	};
 
-	const curves: Record<string, THREE.Vector3>[] = coordinates.map(
+	const curves: Record<string, Vector3>[] = coordinates.map(
 		({startLat, startLng, endLat, endLng}: Record<string, number>) => {
 			const start = latLonToCoord({lat: startLat, lon: startLng});
 			const end = latLonToCoord({lat: endLat, lon: endLng});
 			const distance = Math.sqrt(
 				(end.x - start.x) ** 2 + (end.y - start.y) ** 2 + (end.z - start.z) ** 2
 			);
-			const smallArc = distance < 0.5;
-			// const arc = -1 * (arcAlt + 1);
-			const arc = -1;
-			const normalize = (input: number) => (smallArc ? input : input);
-			const midA = new THREE.Vector3(
-				normalize(start.x),
-				normalize(start.y),
-				arc
+			const factor =
+				distance < 0.1
+					? 1.075
+					: distance < 0.5
+					? 1.1
+					: distance > 1
+					? 1.5
+					: 1.25;
+			const midA = new Vector3(
+				start.x * factor + 0.4 * (end.x - start.x),
+				start.y * factor + 0.4 * (end.y - start.y),
+				start.z * factor + 0.4 * (end.z - start.z)
 			);
-			const midB = new THREE.Vector3(normalize(end.x), normalize(end.y), arc);
+			const midB = new Vector3(
+				end.x * factor + 0.4 * (start.x - end.x),
+				end.y * factor + 0.4 * (start.y - end.y),
+				end.z * factor + 0.4 * (start.z - end.z)
+			);
 
 			return {
 				start,
@@ -81,11 +91,11 @@ export const Globe: React.FC = () => {
 		<>
 			<group
 				scale={1}
-				rotation={[0.6, constantRotation + 350, 0]}
+				rotation={[0.5, constantXRotation + 350, 0]}
 				position={[0, 0, 0]}
 			>
 				{curves.map(({start, end, midA, midB}, i) => {
-					const curve = new THREE.CubicBezierCurve3(start, midA, midB, end);
+					const curve = new CubicBezierCurve3(start, midA, midB, end);
 					const delay = i * fps;
 					const duration = durationInFrames - fps;
 					return (
@@ -105,11 +115,6 @@ export const Globe: React.FC = () => {
 						</mesh>
 					);
 				})}
-				<Sphere removeFromParent args={[1, 64, 32]}>
-					{/* eslint-disable-next-line */}
-					{/* @ts-ignore */}
-					<meshPhongMaterial map={earthUVMap} />
-				</Sphere>
 				<Stars
 					fade
 					radius={50}
@@ -118,10 +123,17 @@ export const Globe: React.FC = () => {
 					factor={10}
 					saturation={0}
 				/>
+				<Sphere args={[1, 64, 32]}>
+					{/* eslint-disable-next-line */}
+					{/* @ts-ignore */}
+					<meshPhongMaterial map={earthUVMap} />
+				</Sphere>
 			</group>
 			<group>
 				<mesh scale={scale}>
 					<planeBufferGeometry />
+					{/* eslint-disable-next-line */}
+					{/* @ts-ignore */}
 					<meshBasicMaterial transparent attach="material" map={texture} />
 				</mesh>
 			</group>

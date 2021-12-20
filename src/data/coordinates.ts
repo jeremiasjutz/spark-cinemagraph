@@ -1,4 +1,25 @@
 const coordinates = [
+	// schweiz - portugal
+	{
+		startLat: 47.1544187,
+		startLng: 8.0914555,
+		endLat: 38.7436214,
+		endLng: -9.1952226,
+	},
+	// norwegen - italien
+	{
+		startLat: 61.2648013,
+		startLng: 9.8268893,
+		endLat: 43.7799528,
+		endLng: 11.2059486,
+	},
+	// schweiz - südamerika
+	{
+		startLat: 47.1544187,
+		startLng: 8.0914555,
+		endLat: 11.4052774,
+		endLng: -69.6899916,
+	},
 	{
 		startLat: 42.85,
 		startLng: 74.583333333,
