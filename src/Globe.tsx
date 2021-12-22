@@ -1,23 +1,22 @@
 import React, {useEffect} from 'react';
 import {useThree} from '@react-three/fiber';
-import {CubicBezierCurve3, Vector3} from 'three';
+import {CubicBezierCurve3, DoubleSide, Vector3} from 'three';
 import {Sphere, useAspect, useTexture} from '@react-three/drei';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
-import {Stars} from './CustomStars';
-import uvMap from './assets/earth-uv-map.jpg';
+import uvMapEarth from './assets/earth-uv-map.jpg';
+import uvMapStars from './assets/stars-uv-map.jpeg';
 import coordinates from './data/coordinates';
-
-const CAMERA_DISTANCE = 3;
 
 export const Globe: React.FC = () => {
 	const frame = useCurrentFrame();
 	const {durationInFrames, fps} = useVideoConfig();
-	const earthUVMap = useTexture(uvMap);
+	const earthUVMap = useTexture(uvMapEarth);
+	const starsUVMap = useTexture(uvMapStars);
 
 	const camera = useThree((state) => state.camera);
 	useEffect(() => {
-		camera.position.set(0, 0, CAMERA_DISTANCE);
+		camera.position.set(0, 0, 3);
 		camera.lookAt(0, 0, 0);
 	}, [camera]);
 
@@ -26,11 +25,6 @@ export const Globe: React.FC = () => {
 		[0, durationInFrames],
 		[0, Math.PI * 2]
 	);
-	// const constantYRotation = interpolate(
-	// 	frame,
-	// 	[0, durationInFrames / 2, durationInFrames],
-	// 	[0.6, 0, 0.6]
-	// );
 
 	const latLonToCoord = ({
 		lat,
@@ -62,17 +56,18 @@ export const Globe: React.FC = () => {
 					: distance < 0.5
 					? 1.1
 					: distance > 1
-					? 1.5
+					? 1.6
 					: 1.25;
+			const curveFactor = 0.4;
 			const midA = new Vector3(
-				start.x * factor + 0.4 * (end.x - start.x),
-				start.y * factor + 0.4 * (end.y - start.y),
-				start.z * factor + 0.4 * (end.z - start.z)
+				start.x * factor + curveFactor * (end.x - start.x),
+				start.y * factor + curveFactor * (end.y - start.y),
+				start.z * factor + curveFactor * (end.z - start.z)
 			);
 			const midB = new Vector3(
-				end.x * factor + 0.4 * (start.x - end.x),
-				end.y * factor + 0.4 * (start.y - end.y),
-				end.z * factor + 0.4 * (start.z - end.z)
+				end.x * factor + curveFactor * (start.x - end.x),
+				end.y * factor + curveFactor * (start.y - end.y),
+				end.z * factor + curveFactor * (start.z - end.z)
 			);
 
 			return {
@@ -96,7 +91,7 @@ export const Globe: React.FC = () => {
 			>
 				{curves.map(({start, end, midA, midB}, i) => {
 					const curve = new CubicBezierCurve3(start, midA, midB, end);
-					const delay = i * fps;
+					const delay = (i * fps) / 2;
 					const duration = durationInFrames - fps;
 					return (
 						<mesh key={i}>
@@ -106,7 +101,7 @@ export const Globe: React.FC = () => {
 									count: interpolate(
 										frame,
 										[0 + delay, duration / 2, duration - delay],
-										[0, 99999, 0]
+										[0, 29999, 0]
 									),
 									start: 0,
 								}}
@@ -115,18 +110,20 @@ export const Globe: React.FC = () => {
 						</mesh>
 					);
 				})}
-				<Stars
-					fade
-					radius={50}
-					depth={50}
-					count={1000}
-					factor={10}
-					saturation={0}
-				/>
 				<Sphere args={[1, 64, 32]}>
 					{/* eslint-disable-next-line */}
 					{/* @ts-ignore */}
 					<meshPhongMaterial map={earthUVMap} />
+				</Sphere>
+				<Sphere args={[3, 64, 32]}>
+					<meshPhongMaterial
+						// eslint-disable-next-line
+						// @ts-ignore
+						map={starsUVMap}
+						side={DoubleSide}
+						opacity={0.3}
+						transparent
+					/>
 				</Sphere>
 			</group>
 			<group>

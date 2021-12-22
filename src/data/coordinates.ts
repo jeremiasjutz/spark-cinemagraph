@@ -1,10 +1,10 @@
 const coordinates = [
-	// schweiz - portugal
+	// kasachstan - ukraine
 	{
-		startLat: 47.1544187,
-		startLng: 8.0914555,
-		endLat: 38.7436214,
-		endLng: -9.1952226,
+		startLat: 47.6549572,
+		startLng: 57.9405634,
+		endLat: 48.2486046,
+		endLng: 26.6937776,
 	},
 	// norwegen - italien
 	{
@@ -12,6 +12,41 @@ const coordinates = [
 		startLng: 9.8268893,
 		endLat: 43.7799528,
 		endLng: 11.2059486,
+	},
+	// oman - Kandalakscha
+	{
+		startLat: 21.386699,
+		startLng: 51.6588148,
+		endLat: 67.1637442,
+		endLng: 32.3276412,
+	},
+	// tshad - italien
+	{
+		startLat: 15.4008641,
+		startLng: 14.2406597,
+		endLat: 37.5581087,
+		endLng: 14.2753022,
+	},
+	// schweiz - portugal
+	{
+		startLat: 47.1544187,
+		startLng: 8.0914555,
+		endLat: 38.7436214,
+		endLng: -9.1952226,
+	},
+	// somalia - westsahara
+	{
+		startLat: 9.5080898,
+		startLng: 49.0770541,
+		endLat: 24.0583415,
+		endLng: -15.3058677,
+	},
+	// somalia - westsahara
+	{
+		startLat: 32.5080898,
+		startLng: 13.0770541,
+		endLat: 24.0583415,
+		endLng: -1.3058677,
 	},
 	// schweiz - südamerika
 	{

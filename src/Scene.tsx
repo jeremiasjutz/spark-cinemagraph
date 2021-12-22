@@ -24,11 +24,23 @@ export const Scene: React.FC = () => {
 
 	return (
 		<AbsoluteFill style={container}>
-			<ThreeCanvas linear width={width} height={height} className="z-0">
+			<ThreeCanvas
+				linear
+				width={width}
+				height={height}
+				className="z-0"
+				gl={{
+					powerPreference: 'high-performance',
+					antialias: false,
+					stencil: false,
+					depth: false,
+				}}
+			>
 				<ambientLight intensity={2} color={0xffffff} />
 				<Globe />
 				<EffectComposer>
 					<Noise premultiply blendFunction={BlendFunction.ADD} />
+					{/* 1,7,15,26, */}
 					<Scanline blendFunction={BlendFunction.OVERLAY} density={1} />
 					<ChromaticAberration
 						blendFunction={BlendFunction.NORMAL}
