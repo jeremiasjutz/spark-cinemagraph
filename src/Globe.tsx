@@ -51,13 +51,7 @@ export const Globe: React.FC = () => {
 				(end.x - start.x) ** 2 + (end.y - start.y) ** 2 + (end.z - start.z) ** 2
 			);
 			const factor =
-				distance < 0.1
-					? 1.075
-					: distance < 0.5
-					? 1.1
-					: distance > 1
-					? 1.6
-					: 1.25;
+				distance < 0.1 ? 1.1 : distance < 0.5 ? 1.2 : distance > 1 ? 1.6 : 1.3;
 			const curveFactor = 0.4;
 			const midA = new Vector3(
 				start.x * factor + curveFactor * (end.x - start.x),
@@ -91,7 +85,7 @@ export const Globe: React.FC = () => {
 			>
 				{curves.map(({start, end, midA, midB}, i) => {
 					const curve = new CubicBezierCurve3(start, midA, midB, end);
-					const delay = (i * fps) / 2;
+					const delay = (i * fps) / 1.3;
 					const duration = durationInFrames - fps;
 					return (
 						<mesh key={i}>

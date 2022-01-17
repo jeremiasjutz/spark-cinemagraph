@@ -41,13 +41,6 @@ const coordinates = [
 		endLat: 24.0583415,
 		endLng: -15.3058677,
 	},
-	// somalia - westsahara
-	{
-		startLat: 32.5080898,
-		startLng: 13.0770541,
-		endLat: 24.0583415,
-		endLng: -1.3058677,
-	},
 	// schweiz - südamerika
 	{
 		startLat: 47.1544187,
@@ -55,11 +48,89 @@ const coordinates = [
 		endLat: 11.4052774,
 		endLng: -69.6899916,
 	},
+	// marrakesh - new york
 	{
-		startLat: 42.85,
-		startLng: 74.583333333,
-		endLat: 41.266666666667,
-		endLng: 69.366666666667,
+		startLat: 31.634545,
+		startLng: -8.1479359,
+		endLat: 40.6974034,
+		endLng: -74.119763,
+	},
+	// sierra leone - natal
+	{
+		startLat: 8.4159214,
+		startLng: -14.0813598,
+		endLat: -5.7999017,
+		endLng: -35.3623283,
+	},
+	// niger - mexiko
+	{
+		startLat: 16.7586638,
+		startLng: -10.2126075,
+		endLat: 19.3905191,
+		endLng: -99.4237963,
+	},
+	// paraguay - usa
+	{
+		startLat: -23.4228666,
+		startLng: -57.469136,
+		endLat: 28.4808861,
+		endLng: -81.6228463,
+	},
+	// ecuador - lybien
+	{
+		startLat: 26.558635682774174,
+		startLng: -9.468889226541124,
+		endLat: -0.1865921,
+		endLng: -78.7107241,
+	},
+	// misouri - kanada
+	{
+		startLat: 37.72061091484639,
+		startLng: -93.3475225675098,
+		endLat: 61.54358192210186,
+		endLng: -110.56775571687868,
+	},
+	// grönland - misouri
+	{
+		startLat: 78.33338855238347,
+		startLng: -42.643896930896865,
+		endLat: 37.72061091484639,
+		endLng: -93.3475225675098,
+	},
+	// südamerika - südamerika
+	{
+		startLat: -11.350724956511002,
+		startLng: -39.552424504754974,
+		endLat: 5.124851030020895,
+		endLng: -66.71060923804123,
+	},
+	// mexiko - misouri
+	{
+		startLat: 19.294541003975667,
+		startLng: -99.62350304782976,
+		endLat: 37.72061091484639,
+		endLng: -93.3475225675098,
+	},
+	// new york - misouri
+	{
+		startLat: 40.6974034,
+		startLng: -74.119763,
+		endLat: 37.72061091484639,
+		endLng: -93.3475225675098,
+	},
+	// misouri - florida
+	{
+		startLat: 37.72061091484639,
+		startLng: -93.3475225675098,
+		endLat: 28.4808861,
+		endLng: -81.6228463,
+	},
+	// usa right - usa middle
+	{
+		startLat: 33.94610453818679,
+		startLng: -80.03730290560846,
+		endLat: 40.6266592786952,
+		endLng: -108.57803638298357,
 	},
 	{
 		startLat: 41.266666666667,
